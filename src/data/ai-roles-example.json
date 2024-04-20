@@ -1,0 +1,17 @@
+{
+    "application-name": "My Beautiful App",
+    "secret-key": "sk-proj-hCQeGdISbk2Kb7hfIkVkT3BlbkFJBAU93IOIDaElSLVYaVD9",
+    "roles": {
+        "raw-to-meaningful": {
+            "prompt": "",
+            "history": [
+                "user::bunu dedim",
+                "chat::ben de bunu dedim"
+            ]
+        },
+        "md-historian": {},
+        "md-mathematician": {},
+        "md-auto": {}
+    
+    }
+}
