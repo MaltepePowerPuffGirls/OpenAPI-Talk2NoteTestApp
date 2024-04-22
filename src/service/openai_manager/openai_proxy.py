@@ -5,10 +5,15 @@ from requests.models import Response
 import os
 from enum import Enum
 
+from core.module.logger import AppLogger
+from logging import Logger
+
 class OpenAPIProxyType(Enum):
     Completion = "completions"
 
 class OpenAPIProxy:
+
+    _logger: Logger = AppLogger(__name__)
 
     def_header = {
             "Content-Type": "application/json",
@@ -34,9 +39,11 @@ class OpenAPIProxy:
         headers = cls.gen_headers(proxy_type)
         url = cls.proxy_urls.get(proxy_type)
 
+        cls._logger.debug(f"Sending request to {url} with headers: {headers} and data: {data}")
         response: Response = requests.post(url=url, 
                                  headers=headers, 
                                  json=data)
+        cls._logger.debug(f"Received response: {response.status_code} - {response.text}")
         
         return response
         
