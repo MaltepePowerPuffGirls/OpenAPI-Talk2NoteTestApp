@@ -7,10 +7,12 @@ DEFAULT_LOG_FORMAT = "%(asctime)s : %(levelname)s : %(process)d --- [%(name)s] :
 DEFAULT_LOG_LEVEL = logging.DEBUG
 
 BASE_PATH = Path(os.getcwd())
-LOG_PATH: Path = BASE_PATH/"src"/"core"/"logs"
+LOG_FOLDER_PATH: Path = BASE_PATH / "src" / "data" / "logs"
+# LOG_NAME_FORMAT = LOG_FOLDER_PATH / f"{name}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
+LOG_PATH = LOG_FOLDER_PATH / "app.log"
 
 class AppLogger:
-    def __init__(self, name, log_to_console=True, log_to_file=False, level=DEFAULT_LOG_LEVEL, format=DEFAULT_LOG_FORMAT):
+    def __init__(self, name, log_to_console=False, log_to_file=True, level=DEFAULT_LOG_LEVEL, format=DEFAULT_LOG_FORMAT):
         self.logger = logging.getLogger(name)
         self.logger.setLevel(level)
         self.log_to_console = log_to_console
@@ -22,10 +24,8 @@ class AppLogger:
 
         # File Handler
         if log_to_file:
-            log_dir = LOG_PATH
-            log_dir.mkdir(parents=True, exist_ok=True)  # Create logs directory if it doesn't exist
-            log_path = log_dir / f"{name}_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log"
-            file_handler = logging.FileHandler(log_path)
+            LOG_FOLDER_PATH.mkdir(parents=True, exist_ok=True)  # Create logs directory if it doesn't exist
+            file_handler = logging.FileHandler(LOG_PATH)
             file_handler.setFormatter(formatter)
             self.logger.addHandler(file_handler)
 

@@ -1,5 +1,8 @@
 
 from openai import OpenAI
+from simple_term_menu import TerminalMenu
+
+from typing import List
 
 from service.openai_manager.openai_proxy import OpenAPIProxy
 from service.openai_manager.openai_role import OpenAIRole
@@ -23,6 +26,7 @@ class App:
     defaults: dict
 
     roles: Dict[str, OpenAIRole]
+    selected_role: OpenAI
 
     _logger: Logger = AppLogger(__name__)
 
@@ -90,3 +94,34 @@ class App:
 
             self.roles[role_name] = role
             self._logger.info(f"Role generated: {role_name}")
+
+    def init_menu(self):
+        
+        role_names = [role_name for role_name in self.roles.keys()]
+        option_role_names = self.conv_role_names(role_names)
+        options = [*option_role_names, "Quit"]
+
+        main_menu = TerminalMenu(options, title="OpenAI Test Tool : Select an actor >")
+        main_running = True
+
+        while (main_running):
+            option_index = main_menu.show()
+            option_choice = options[option_index]
+
+            if (option_choice == "Quit"):
+                main_running = False
+            else:
+                self.selected_role = self.roles[role_names[option_index]]
+
+            while (self.selected_role is not None):
+                prompt = input(f" * prompt (role:{self.selected_role.role_name} / @back) : ")
+                
+                if prompt.lower() in ["exit", "back"]:
+                    self.selected_role = None
+                    continue
+
+                self.chat(self.selected_role, {"prompt": prompt})
+
+    @staticmethod
+    def conv_role_names(role_names: List[str]) -> List[str]:
+        return [f"[{index}] " + r_name.replace("-"," ").title() for index, r_name in enumerate(role_names, 1)]
