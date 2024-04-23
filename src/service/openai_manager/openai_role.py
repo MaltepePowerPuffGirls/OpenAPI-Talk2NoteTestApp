@@ -7,15 +7,11 @@ class OpenAIRole:
 
     def __init__(self,
                  role_name: str,
-                 actor: str,
                  method: str,
-                 purpose: str,
                  temperature: str,
                  messages: List[str] = []) -> None:
         self.role_name = role_name
-        self.actor = actor
         self.method = method
-        self.purpose = purpose
         self.temperature = temperature
         self.messages = messages
 
